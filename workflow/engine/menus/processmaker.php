@@ -55,8 +55,15 @@ if ($RBAC->userCanAccess('PM_SETUP') == 1 || $RBAC->userCanAccess('PM_USERS') ==
 
 /*----------------------------------********---------------------------------*/
 if ($RBAC->userCanAccess('PM_CASES') == 1) {
-    $G_TMP_MENU->AddIdRawOption('NEW_REQUEST', 'cases/main', G::LoadTranslation('ID_NEW_REQUEST'), '', '', '', 'x-pm-home');
+    $G_TMP_MENU->AddIdRawOption('NEW_APPLICATION', 'cases/main', G::LoadTranslation('ID_NEW_APPLICATION'), '', '', '', 'x-pm-home');
 }
+
+if ($RBAC->userCanAccess('PM_CASES') == 1) {
+    $G_TMP_MENU->AddIdRawOption('APPLICATIONS_TO_HANDLE', 'cases/main', G::LoadTranslation('ID_APPLICATIONS_TO_HANDLE'), '', '', '', 'x-pm-home');
+}
+
+
+
 
 
 // PLUGINS MENUS
