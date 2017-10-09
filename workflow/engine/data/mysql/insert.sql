@@ -1679,7 +1679,8 @@ INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE 
 ( 'LABEL','ID_NEW_REPORT_TABLE','en','New Report Table','2014-01-15') ,
 ( 'LABEL','ID_EDIT_REPORT_TABLE','en','Edit Report Table','2014-01-15') ,
 ( 'LABEL','ID_MSG_CONFIRM_DELETE_REPORT_TABLE','en','Do you want to delete this report table?','2014-01-15'),
-( 'LABEL','ID_NEW_REQUEST','en','New request','2017-10-09') ;
+( 'LABEL','ID_NEW_APPLICATION','en','New application','2017-10-09'),
+( 'LABEL','ID_APPLICATIONS_TO_HANDLE','en','Applications to handle','2017-10-09');
 INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE )  VALUES 
 
 ( 'LABEL','ID_PLEASE_ENTER_REQUIRED_FIELDS','en','Please enter the required fields','2014-01-15') ,
