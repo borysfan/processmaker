@@ -729,6 +729,7 @@ class SkinEngine
         }
       }
 
+      // #Menu Main menu
       $oMenu = new Menu();
       $menus = $oMenu->generateArrayForTemplate($G_MAIN_MENU, 'SelectedMenu', 'mainMenu', $G_MENU_SELECTED, $G_ID_MENU_SELECTED);
       $smarty->assign('menus', $menus);

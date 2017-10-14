@@ -91,6 +91,7 @@ Ext.onReady(function(){
     listeners: {
       'click': function(tp) {
         if( tp.attributes.url ){
+          //  console.log(tp.attributes.url);
           document.getElementById('casesSubFrame').src = tp.attributes.url;
         }
       },
