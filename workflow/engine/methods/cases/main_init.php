@@ -59,11 +59,6 @@ if (isset( $arrayConfig["DEFAULT_CASES_MENU"] )) {
     }
 
     $defaultOption = ($defaultOption != "") ? $defaultOption : "casesListExtJs";
-} else if (isset($_SESSION['G_CASE_DEFAULT_OPTION']) && isset($_SESSION['G_CASE_CONF_DEFAULT_OPTION'])) {
-    $defaultOption = $_SESSION['G_CASE_DEFAULT_OPTION'];
-    $confDefaultOption = $_SESSION['G_CASE_CONF_DEFAULT_OPTION'];
-    unset($_SESSION['G_CASE_DEFAULT_OPTION']);
-    unset($_SESSION['G_CASE_CONF_DEFAULT_OPTION']);
 } else {
     $defaultOption = "casesListExtJs";
     $confDefaultOption = "CASES_INBOX";

@@ -27,13 +27,10 @@ $RBAC->requirePermissions( 'PM_CASES' );
 $G_MAIN_MENU = 'processmaker';
 $G_ID_MENU_SELECTED = 'NEW_APPLICATION';
 
-$_SESSION['G_CASE_DEFAULT_OPTION'] = 'casesStartPage?action=startCase';
-$_SESSION['G_CASE_CONF_DEFAULT_OPTION'] = 'CASES_START_CASE';
-
 $_POST['qs'] = isset( $_SERVER['QUERY_STRING'] ) && $_SERVER['QUERY_STRING'] != '' ? '?' . $_SERVER['QUERY_STRING'] : '';
 
 $G_PUBLISH = new Publisher();
-$G_PUBLISH->AddContent( 'view', 'cases/cases_Load' );
+$G_PUBLISH->AddContent( 'view', 'newApplication/newApplicationsLoad' );
 $oHeadPublisher = & headPublisher::getSingleton();
 $oHeadPublisher->addScriptFile('/jscore/src/PM.js');
 $oHeadPublisher->addScriptFile('/jscore/src/Sessions.js');
