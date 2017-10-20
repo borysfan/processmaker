@@ -32,6 +32,7 @@ Ext.onReady(function(){
                 style:'padding:10px 10px 10px 10px',
                 items:[
                     {
+                        collapsible: false,
                         items: {
                             xtype: 'form',
                             buttonAlign: 'center',
@@ -68,6 +69,7 @@ Ext.onReady(function(){
                 style:'padding:10px 0 10px 10px',
                 items:[
                     {
+                        collapsible: false,
                         items: {
                             xtype: 'form',
                             buttonAlign: 'center',

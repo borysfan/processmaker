@@ -237,42 +237,42 @@ Ext.onReady(function() {
         dblclick : function(n) {
             openCaseA(n);
         },
-        click : function(n) {
-        	Ext.Ajax.request({
-                url : 'casesStartPage_Ajax' ,
-                params : {action : 'verifySession'},
-                success: function ( result, request ) {
-                  var data = Ext.util.JSON.decode(result.responseText);
-                  if( data.lostSession ) {
-                   Ext.Msg.show({
-                          title: _('ID_ERROR'),
-                          msg: data.message,
-                          animEl: 'elId',
-                          icon: Ext.MessageBox.ERROR,
-                          buttons: Ext.MessageBox.OK,
-                          fn : function(btn) {
-                            try 
-                                  {
-                                    prnt = parent.parent;
-                                    top.location = top.location;
-                                  }
-                                catch (err) 
-                                  {
-                                    parent.location = parent.location;
-                                  }
-                          }
-                        });
-                  } else {
-                      showDetailsA(n);
-                  }
-                },
-                failure: function ( result, request) {
-                 if (typeof(result.responseText) != 'undefined') {
-                         Ext.MessageBox.alert( _('ID_FAILED'), result.responseText);
-                     }
-                }
-           });
-        },
+        // click : function(n) {
+        // 	Ext.Ajax.request({
+        //         url : 'casesStartPage_Ajax' ,
+        //         params : {action : 'verifySession'},
+        //         success: function ( result, request ) {
+        //           var data = Ext.util.JSON.decode(result.responseText);
+        //           if( data.lostSession ) {
+        //            Ext.Msg.show({
+        //                   title: _('ID_ERROR'),
+        //                   msg: data.message,
+        //                   animEl: 'elId',
+        //                   icon: Ext.MessageBox.ERROR,
+        //                   buttons: Ext.MessageBox.OK,
+        //                   fn : function(btn) {
+        //                     try
+        //                           {
+        //                             prnt = parent.parent;
+        //                             top.location = top.location;
+        //                           }
+        //                         catch (err)
+        //                           {
+        //                             parent.location = parent.location;
+        //                           }
+        //                   }
+        //                 });
+        //           } else {
+        //               showDetailsA(n);
+        //           }
+        //         },
+        //         failure: function ( result, request) {
+        //          if (typeof(result.responseText) != 'undefined') {
+        //                  Ext.MessageBox.alert( _('ID_FAILED'), result.responseText);
+        //              }
+        //         }
+        //    });
+        // },
         load: function(node){
             if (node.childNodes.length == 0)
             {
@@ -285,8 +285,7 @@ Ext.onReady(function() {
   });
 
 
-
-  var details = {
+  /*var details = {
     xtype:'form',
     id : 'process-detail-panel',
     region : 'east',
@@ -418,15 +417,91 @@ Ext.onReady(function() {
         disabledClass:""
       }
     ]
-  }
+  }*/
+
+    Ext.Ajax.request({
+        url: 'casesStartPage_Ajax?action=getProcessList',
+        success: function(response, opts) {
+            var obj = Ext.decode(response.responseText);
+            var processes = extractProcesses(obj);
+            showProcessesPanel(processes);
+        },
+        failure: function(response, opts) {
+            console.log('There was a problem with loading list of available processes ' + response.status);
+        }
+    });
+
+    function extractProcesses(obj) {
+        var processes = [];
+        for (var categoryIdx = 0; categoryIdx <obj.length;categoryIdx++) {
+            for (var childrenIdx = 0; childrenIdx < obj[categoryIdx].children.length; childrenIdx++) {
+                processes.push(obj[categoryIdx].children[childrenIdx]);
+            }
+        }
+        return processes;
+    }
 
     Ext.QuickTips.init();
 
-    newCaseTree.hide();infoCase.hide();
-    var viewport = new Ext.Viewport({
-        layout : 'border',
-        items : [ infoCase , newCaseTree,  details]
-    });
+    function showProcessesPanel(processes) {
+        console.dir(processes);
+        var columnsNo = 3;
+        var columnItems ={
+            0: [],
+            1: [],
+            2: []
+        };
+        for (var idx = 0; idx < processes.length; idx++) {
+            columnItems[idx % columnsNo].push({
+                    xtype: 'startCasePanel',
+                    name: processes[idx].otherAttributes.PRO_TITLE,
+                    processDetails: processes[idx],
+                    fields: [
+                        {
+                            label: 'Ilość dostpęnych dni urlopowych',
+                            value: '7'
+                        }, {
+                            label: 'Ilość dni UNŻ',
+                            value: '3'
+                        }
+                    ]
+                });
+        }
+        var viewport = new Ext.Viewport({
+            layout: 'fit',
+            name: 'viewportDashboard',
+            id: 'viewportDashboard',
+            items: [{
+                xtype: 'portal',
+                region: 'center',
+                margins: '35 5 5 5',
+                name: 'portalDashboard',
+                id: 'portalDashboard',
+                items: [{
+                    columnWidth: .33,
+                    id: 'columnPos0',
+                    style: 'padding:10px 10px 10px 10px; margin: 10px 10px 10px 10px;',
+                    items: columnItems[0]
+                }, {
+                    columnWidth: .33,
+                    id: 'columnPos1',
+                    style: 'padding:10px 10px 10px 10px; margin: 10px 10px 10px 10px;',
+                    items: columnItems[1]
+                }, {
+                    columnWidth: .33,
+                    id: 'columnPos2',
+                    style: 'padding:10px 10px 10px 10px; margin: 10px 10px 10px 10px;',
+                    items: columnItems[2]
+                }]
+
+            }]
+        });
+    }
+    //newCaseTree.hide();infoCase.hide();
+    // var viewport = new Ext.Viewport({
+    //     layout : 'border',
+    //     items : [ infoCase , newCaseTree/*,  details*/]
+    // });
 
   //routine to hide the debug panel if it is open
   if( typeof parent != 'undefined' ){
@@ -438,7 +513,7 @@ Ext.onReady(function() {
   }
 
   if (FORMATS.startCaseHideProcessInf) {
-    Ext.getCmp('process-detail-panel').hide();
+    /*Ext.getCmp('process-detail-panel').hide();*/
     Ext.getCmp('startCaseTreePanel').ownerCt.doLayout();
   }
 });
@@ -519,42 +594,42 @@ function openCaseA(n){
   }
 };
 
-function showDetailsA(selectedNode) {
-
-  // console.log(selectedNode);
-  var detailEl = Ext.getCmp('process-detail-panel').body;
-  if ((selectedNode)&&(selectedNode.attributes.otherAttributes)) {
-    otherAttributes = selectedNode.attributes.otherAttributes;
-    calendarDays=(otherAttributes.CALENDAR_WORK_DAYS).split("|");
-    calendarObj={0: false, 1: false, 2: false, 3: false, 4: false, 5: false, 6: false};
-
-    for(i=0;i<calendarDays.length;i++){
-    calendarObj[calendarDays[i]]=true;
-    }
-    //console.log(otherAttributes);
-    //starCaseButton
-    Ext.ComponentMgr.get("starCaseButton").enable();
-    Ext.getCmp('process-detail-panel').getForm().setValues({
-      processName : otherAttributes.PRO_TITLE,
-      taskName : otherAttributes.PRO_TAS_TITLE,
-      calendarName : otherAttributes.CALENDAR_NAME,
-      calendarDescription : otherAttributes.CALENDAR_DESCRIPTION,
-      processCalendar:otherAttributes.CALENDAR_NAME+" "+otherAttributes.CALENDAR_DESCRIPTION,
-      calendarWorkDays : calendarObj,/* (otherAttributes.CALENDAR_WORK_DAYS).split("|"), */
-      processCategory : otherAttributes.PRO_CATEGORY_LABEL,
-      processDebug : otherAttributes.PRO_DEBUG,
-      processDescription : otherAttributes.PRO_DESCRIPTION,
-      myInbox : otherAttributes.myInbox,
-      totalInbox : otherAttributes.totalInbox
-
-    });
-
-  } else {
-    //detailEl.update('');
-  }
-
-  return;
-};
+// function showDetailsA(selectedNode) {
+//
+//   // console.log(selectedNode);
+//   var detailEl = Ext.getCmp('process-detail-panel').body;
+//   if ((selectedNode)&&(selectedNode.attributes.otherAttributes)) {
+//     otherAttributes = selectedNode.attributes.otherAttributes;
+//     calendarDays=(otherAttributes.CALENDAR_WORK_DAYS).split("|");
+//     calendarObj={0: false, 1: false, 2: false, 3: false, 4: false, 5: false, 6: false};
+//
+//     for(i=0;i<calendarDays.length;i++){
+//     calendarObj[calendarDays[i]]=true;
+//     }
+//     //console.log(otherAttributes);
+//     //starCaseButton
+//     Ext.ComponentMgr.get("starCaseButton").enable();
+//     Ext.getCmp('process-detail-panel').getForm().setValues({
+//       processName : otherAttributes.PRO_TITLE,
+//       taskName : otherAttributes.PRO_TAS_TITLE,
+//       calendarName : otherAttributes.CALENDAR_NAME,
+//       calendarDescription : otherAttributes.CALENDAR_DESCRIPTION,
+//       processCalendar:otherAttributes.CALENDAR_NAME+" "+otherAttributes.CALENDAR_DESCRIPTION,
+//       calendarWorkDays : calendarObj,/* (otherAttributes.CALENDAR_WORK_DAYS).split("|"), */
+//       processCategory : otherAttributes.PRO_CATEGORY_LABEL,
+//       processDebug : otherAttributes.PRO_DEBUG,
+//       processDescription : otherAttributes.PRO_DESCRIPTION,
+//       myInbox : otherAttributes.myInbox,
+//       totalInbox : otherAttributes.totalInbox
+//
+//     });
+//
+//   } else {
+//     //detailEl.update('');
+//   }
+//
+//   return;
+// };
 
 
 Ext.ux.MaskTree = Ext.extend(Ext.tree.TreePanel, {
@@ -584,8 +659,76 @@ Ext.ux.MaskTree = Ext.extend(Ext.tree.TreePanel, {
         this.getLoader().on('load', mask.hide, mask);
     }
 }); // end of extend
-
 Ext.reg('masktree', Ext.ux.MaskTree);
+
+Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
+    name: '',
+    fields: [],
+    processDetails: undefined,
+
+
+    initComponent: function(){
+        this.collapsible = false;
+        this.cls =  'x-portal';
+        this.frame = true;
+        this.draggable = false;
+        var me = this;
+        this.items = [{
+            xtype: 'form',
+            padding: 5,
+            margin: 5,
+            buttonAlign: 'center',
+            labelWidth: 200,
+            height: 140,
+            style: 'padding: 5px;',
+            items: this.initDisplayFields(),
+            buttons: [
+                {
+                    xtype: 'button',
+                    width: 100,
+                    text: 'Dodaj wniosek',
+                    listeners: {
+                        click: function() {
+                            console.log(me.buildStartProcessCommand());
+                            openCaseA(me.buildStartProcessCommand());
+                        }
+                    }
+
+
+                }
+            ]
+        }];
+        Ext.ux.StartCasePanel.superclass.initComponent.call(this);
+    },
+
+    buildStartProcessCommand: function() {
+        return {
+            attributes: this.processDetails
+        }
+    },
+
+    initDisplayFields: function(){
+        var displayFields = [
+            {
+                xtype: 'displayfield',
+                fieldLabel: 'Nazwa wniosku',
+                value: this.name
+            }
+        ];
+
+        for (var i = 0; i < this.fields.length; i++) {
+            displayFields.push({
+                xtype: 'displayfield',
+                fieldLabel: this.fields[i].label,
+                value: this.fields[i].value
+            });
+        }
+        return displayFields;
+    }
+
+});
+Ext.reg('startCasePanel', Ext.ux.StartCasePanel);
+
 
 Ext.EventManager.on(window, 'beforeunload', function () {
   if(newCaseNewTab) {

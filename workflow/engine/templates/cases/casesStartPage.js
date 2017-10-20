@@ -151,6 +151,7 @@ Ext.extend(
 	}
 );
 
+
 var mainPanel = new MainPanel();
 
 Ext.onReady(function() {
