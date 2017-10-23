@@ -385,6 +385,14 @@ class Applications
         $CriteriaCount->addAsColumn( 'USR_LASTNAME', 'CU.USR_LASTNAME' );
         $CriteriaCount->addAsColumn( 'USR_USERNAME', 'CU.USR_USERNAME' );
 
+        $Criteria->addAlias('APP', 'APPLICATION');
+        $Criteria->addJoin(AppCacheViewPeer::APP_UID, 'APP.APP_UID', Criteria::LEFT_JOIN);
+        $Criteria->addAlias('AUTHOR', 'USERS');
+        $Criteria->addJoin('APP.APP_INIT_USER', 'AUTHOR.USR_UID', Criteria::LEFT_JOIN);
+        $Criteria->addAsColumn( 'AUTHOR_FIRSTNAME', 'AUTHOR.USR_FIRSTNAME' );
+        $Criteria->addAsColumn( 'AUTHOR_LASTNAME', 'AUTHOR.USR_LASTNAME' );
+        $Criteria->addAsColumn( 'AUTHOR_USERNAME', 'AUTHOR.USR_USERNAME' );
+
         //Current delegation
         $appdelcrTableName = AppCacheViewPeer::TABLE_NAME;
         $appdelcrAppTasTitle = "APPDELCR.APP_TAS_TITLE";
@@ -774,7 +782,7 @@ class Applications
         //limit the results according the interface
         $Criteria->setLimit( $limit );
         $Criteria->setOffset( $start );
-
+        //echo $Criteria->toString();
         //execute the query
         $oDataset = AppCacheViewPeer::doSelectRS( $Criteria, Propel::getDbConnection('workflow_ro') );
 

@@ -611,6 +611,16 @@ Ext.onReady ( function() {
         }
     };
 
+    author_full_name = function(v, x ,s) {
+        console.log('AUTHOR_FIRSTNAME:' + s.data.AUTHOR_FIRSTNAME);
+        if (s.data.AUTHOR_FIRSTNAME && s.data.AUTHOR_LASTNAME) {
+            return _FNF(s.data.AUTHOR_USERNAME, s.data.AUTHOR_FIRSTNAME, s.data.AUTHOR_LASTNAME);
+        }
+        else {
+            return '[' + _('ID_UNASSIGNED').toUpperCase() + ']';
+        }
+    };
+
     for(var i = 0, len = columns.length; i < len; i++){
         var c = columns[i];
         c.renderer = columnRenderer;
@@ -624,6 +634,7 @@ Ext.onReady ( function() {
 
         if( c.dataIndex == 'CASE_SUMMARY')          c.sortable = false;
         if( c.dataIndex == 'CASE_NOTES_COUNT')      c.sortable = false;
+        if( c.dataIndex == 'AUTHOR_USR_FULLNAME')    c.renderer = author_full_name;
 
         //Format the name if is disabled solr, otherwise show without format
         if (solrEnabled == 0) {
@@ -641,6 +652,10 @@ Ext.onReady ( function() {
     readerFields.push ( {name: "USR_FIRSTNAME"});
     readerFields.push ( {name: "USR_LASTNAME"});
     readerFields.push ( {name: "USR_USERNAME"});
+
+    readerFields.push ( {name: "AUTHOR_FIRSTNAME"});
+    readerFields.push ( {name: "AUTHOR_LASTNAME"});
+    readerFields.push ( {name: "AUTHOR_USERNAME"});
 
     for (i=0; i<columns.length; i++) {
         if (columns[i].dataIndex == 'USR_UID') {

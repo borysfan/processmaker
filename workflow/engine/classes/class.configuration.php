@@ -945,6 +945,9 @@ class Configurations // extends Configuration
             default:
                 //todo
                 $caseColumns[] = array("header" => "#", "dataIndex" => "APP_NUMBER", "width" => 45, "align" => "center");
+                $caseColumns[] = array("header" => "Nazwa procesu", "dataIndex" => "APP_PRO_TITLE", "width" => 80, "align" => "center");
+                $caseColumns[] = array("header" => "Obecny krok procesu", "dataIndex" => "APP_TAS_TITLE", "width" => 110, "align" => "center");
+                $caseColumns[] = array("header" => "Autor wniosku", "dataIndex" => "AUTHOR_USR_FULLNAME", "width" => 110, "align" => "center");
                 $caseColumns[] = array("header" => "UserUid", "dataIndex" => "USR_UID", "width" => 50, "hidden" => true, "hideable" => false);
                 $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_SUMMARY") : "ID_SUMMARY", "dataIndex" => "CASE_SUMMARY", "width" => 45, "align" => "center", "sortable" => false);
                 $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_CASES_NOTES") : "ID_CASES_NOTES", "dataIndex" => "CASE_NOTES_COUNT", "width" => 45, "align" => "center", "sortable" => false);
@@ -976,6 +979,8 @@ class Configurations // extends Configuration
                 $caseReaderFields[] = array("name" => "APP_STATUS_LABEL");
                 $caseReaderFields[] = array("name" => "CASE_SUMMARY");
                 $caseReaderFields[] = array("name" => "CASE_NOTES_COUNT");
+                $caseReaderFields[] = array("name" => "USRCR_USR_FIRSTNAME");
+                $caseReaderFields[] = array("name" => "USRCR_USR_LASTNAME");
                 break;
         }
 

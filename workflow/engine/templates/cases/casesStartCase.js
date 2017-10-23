@@ -477,6 +477,9 @@ Ext.onReady(function() {
                 margins: '35 5 5 5',
                 name: 'portalDashboard',
                 id: 'portalDashboard',
+                tbar: {
+                    html: '<span>Dodaj nowy wniosek</span>'
+                },
                 items: [{
                     columnWidth: .33,
                     id: 'columnPos0',
@@ -681,7 +684,7 @@ Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
             labelWidth: 200,
             height: 140,
             style: 'padding: 5px;',
-            items: this.initDisplayFields(),
+            items: this.initD isplayFields(),
             buttons: [
                 {
                     xtype: 'button',
