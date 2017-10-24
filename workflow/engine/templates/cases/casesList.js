@@ -803,23 +803,7 @@ Ext.onReady ( function() {
                     {header: "Numer kroku", dataIndex: 'IDX', width: 30},
                     {header: "Data wykonania kroku", dataIndex: 'DEL_FINISH_DATE', width: 60, renderer:startDateRender},
                     {header: "Nazwa kroku", dataIndex: 'TAS_TITLE', width: 100},
-                    {header: "Wykonawca kroku", dataIndex: 'USR_NAME', width: 60, hidden:false},
-                    {xtype: 'actioncolumn', width: 50, items: [
-                        {
-                            altText: 'Test',                // Use a URL in the icon config
-                            tooltip: 'Sell stock',
-                            handler: function(grid, rowIndex, colIndex) {
-
-                                alert("Sell " + rowIndex);
-                            }
-                        },
-                        {
-                            handler: function(grid, rowIndex, colIndex) {
-
-                                alert("Buy " + colIndex);
-                            }
-                        }
-                    ]}
+                    {header: "Wykonawca kroku", dataIndex: 'USR_NAME', width: 60, hidden:false}
                 ]
             }),
             store: store
