@@ -1994,9 +1994,9 @@ Ext.onReady ( function() {
 
     contextMenuItems = new Array();
     contextMenuItems.push(optionMenuOpen);
-    for (i=0; i<menuItems.length; i++) {
-        contextMenuItems.push(menuItems[i]);
-    }
+    // for (i=0; i<menuItems.length; i++) {
+    //     contextMenuItems.push(menuItems[i]);
+    // }
     var messageContextMenu = new Ext.menu.Menu({
         id: 'messageContextMenu',
         items: contextMenuItems
@@ -2022,11 +2022,11 @@ Ext.onReady ( function() {
 
     var toolbarTodo = [
         optionMenuOpen,
-        {
+        /*{
             xtype: 'tbbutton',
             text: _('ID_ACTIONS'),
             menu: menuItems
-        },
+        },*/
 
         '-',
         btnRead,
@@ -2051,10 +2051,10 @@ Ext.onReady ( function() {
         resetSearchButton,
         btnSearch,
         '-',
-        textJump,
-        btnJump,
-        ' ',
-        ' '
+        // textJump,
+        // btnJump,
+        // ' ',
+        // ' '
     ];
 
     var toolbarGeneral = [
