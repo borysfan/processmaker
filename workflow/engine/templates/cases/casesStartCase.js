@@ -456,6 +456,7 @@ Ext.onReady(function() {
                     xtype: 'startCasePanel',
                     name: processes[idx].otherAttributes.PRO_TITLE,
                     processDetails: processes[idx],
+                    layout: 'fit',
                     fields: [
                         {
                             label: 'Ilość dostpęnych dni urlopowych',
@@ -466,6 +467,9 @@ Ext.onReady(function() {
                         }
                     ]
                 });
+            columnItems[idx % columnsNo].push(new Ext.Spacer({
+                height: 15
+            }));
         }
         var viewport = new Ext.Viewport({
             layout: 'fit',
@@ -679,7 +683,6 @@ Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
         this.items = [{
             xtype: 'form',
             padding: 5,
-            margin: 5,
             buttonAlign: 'center',
             labelWidth: 200,
             height: 140,
