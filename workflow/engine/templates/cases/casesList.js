@@ -612,7 +612,6 @@ Ext.onReady ( function() {
     };
 
     author_full_name = function(v, x ,s) {
-        console.log('AUTHOR_FIRSTNAME:' + s.data.AUTHOR_FIRSTNAME);
         if (s.data.AUTHOR_FIRSTNAME && s.data.AUTHOR_LASTNAME) {
             return _FNF(s.data.AUTHOR_USERNAME, s.data.AUTHOR_FIRSTNAME, s.data.AUTHOR_LASTNAME);
         }
@@ -626,6 +625,7 @@ Ext.onReady ( function() {
         c.renderer = columnRenderer;
         if( c.dataIndex == 'DEL_TASK_DUE_DATE')     c.renderer = dueDate;
         if( c.dataIndex == 'APP_UPDATE_DATE')       c.renderer = showDate;
+        if( c.dataIndex == 'APP_CREATE_DATE')       c.renderer = showDate;
         if( c.id == 'deleteLink')                   c.renderer = deleteLink;
         if( c.id == 'viewLink')                     c.renderer = viewLink;
         if( c.id == 'unpauseLink')                  c.renderer = unpauseLink;
@@ -656,6 +656,7 @@ Ext.onReady ( function() {
     readerFields.push ( {name: "AUTHOR_FIRSTNAME"});
     readerFields.push ( {name: "AUTHOR_LASTNAME"});
     readerFields.push ( {name: "AUTHOR_USERNAME"});
+    readerFields.push ( {name: "APP_CREATE_DATE"});
 
     for (i=0; i<columns.length; i++) {
         if (columns[i].dataIndex == 'USR_UID') {
@@ -664,6 +665,181 @@ Ext.onReady ( function() {
         if(columns[i].dataIndex == 'PREVIOUS_USR_UID') {
             columns[i].hideable=false;
         }
+    }
+
+    var expander;
+    var expandedPanels = {};
+    var expandedRow = -1;
+    if (action == 'todo') {
+        var mask = new Ext.LoadMask(Ext.getBody(), {msg: _('ID_LOADING')});
+        expander = new Ext.ux.grid.RowExpander({
+            tpl : new Ext.Template(
+                '<div id="myrow-{APP_NUMBER}"></div>'
+            ),
+            listeners        : {
+                beforeexpand: function(exp, record, body, rowIndex) {
+                    mask.show();
+                },
+                expand : function( exp, record, body, rowIndex) {
+                    if (expandedRow >= 0 && expandedRow !== rowIndex) {
+                        exp.collapseRow(expandedRow);
+                    }
+                    expandedRow = rowIndex;
+                    var idx = record.get('APP_NUMBER');
+                    var applicationUid = record.get('APP_UID');
+                    var panel = historyGridList(applicationUid);
+                    expandedPanels[idx] = panel;
+                    var row = "myrow-" + idx;
+                    panel.render(row);
+                },
+                collapse : function(expander, record, body, rowIndex) {
+                    var idx = record.get('APP_NUMBER');
+                    expandedPanels[idx].destroy();
+                    expandedRow = -1;
+                }
+
+            }
+        });
+        columns.unshift(expander);
+    }
+
+    function historyGridList(applicationUid){
+        var store = new Ext.data.GroupingStore({
+            proxy : new Ext.data.HttpProxy
+            (
+                {
+                    url: 'caseHistory_Ajax.php?actionAjax=historyGridList_JXP&applicationUid=' + applicationUid
+                }
+            ),
+
+            reader : new Ext.data.JsonReader
+            (
+                {
+                    totalProperty: 'totalCount',
+                    root: 'data',
+                    fields :
+                        [
+                            {name : 'IDX'},
+                            {name : 'ID_HISTORY'},
+                            {name : 'USR_NAME'},
+                            {name : 'TAS_TITLE'},
+                            {name : 'PRO_STATUS'},
+                            {name : 'PRO_STATUS_LABEL'},
+                            {name : 'DEL_INIT_DATE'},
+                            {name : 'PRO_DEBUG'},
+                            {name : 'PRO_DEBUG_LABEL'},
+                            {name : 'DEL_DELEGATE_DATE'},
+                            {name : 'CASES_COUNT', type:'float'},
+                            {name : 'APP_TYPE'},
+                            {name : 'DEL_FINISH_DATE'},
+                            {name : 'APP_ENABLE_ACTION_DATE'},
+                            {name : 'APP_DISABLE_ACTION_DATE'}
+                        ]
+                }
+            )
+        });
+
+
+        var startDateRender = function(v){
+            var dateString = "-";
+            if(v != "-" && v != null){
+                dateString = _DF(v,"m/d/Y H:i:s");
+            }
+            return dateString;
+        };
+
+
+        var pageSize = 15;
+        var selectionModel = new Ext.grid.RowSelectionModel({
+            listeners:{
+                beforerowselect: function( event, rowIndex, keepExisting, record ){
+                    console.log(event);
+                }
+            }
+        });
+        selectionModel.lock();
+
+        var processesGrid = new Ext.grid.GridPanel({
+            region: 'center',
+            layout: 'fit',
+            id: 'myRow-' + applicationUid,
+            autoHeight: true,
+            autoWidth : true,
+            width:'',
+            title : '',
+            enableColumnResize: true,
+            enableHdMenu: true,
+            frame:false,
+            loadMask: mask,
+            viewConfig: {
+                forceFit:true
+            },
+            listeners: {
+                mouseOver: function(e) {
+                    e.stopPropagation();
+                },
+                mouseOut: function(e) {
+                    e.stopPropagation();
+                },
+                mousedown: function( e ) {
+                    e.stopPropagation();
+                },
+                rowMouseDown: function( component, rowIndex, e ) {
+                    e.stopPropagation();
+                },
+                rowdblclick: function( component, rowIndex, e ) {
+                    e.stopPropagation();
+                }
+            },
+            sm: selectionModel,
+            cm: new Ext.grid.ColumnModel({
+                defaults: {
+                    width: 200,
+                    sortable: true
+                },
+                columns: [
+                    {id:'ID_HISTORY', dataIndex: 'ID_HISTORY', hidden:true, hideable:false},
+                    {header: "", dataIndex: 'PRO_STATUS', width: 50, hidden:true, hideable:false},
+                    {header: "Numer kroku", dataIndex: 'IDX', width: 30},
+                    {header: "Data wykonania kroku", dataIndex: 'DEL_FINISH_DATE', width: 60, renderer:startDateRender},
+                    {header: "Nazwa kroku", dataIndex: 'TAS_TITLE', width: 100},
+                    {header: "Wykonawca kroku", dataIndex: 'USR_NAME', width: 60, hidden:false},
+                    {xtype: 'actioncolumn', width: 50, items: [
+                        {
+                            altText: 'Test',                // Use a URL in the icon config
+                            tooltip: 'Sell stock',
+                            handler: function(grid, rowIndex, colIndex) {
+
+                                alert("Sell " + rowIndex);
+                            }
+                        },
+                        {
+                            handler: function(grid, rowIndex, colIndex) {
+
+                                alert("Buy " + colIndex);
+                            }
+                        }
+                    ]}
+                ]
+            }),
+            store: store
+
+        });
+
+        processesGrid.store.load({params: {"function":"languagesList", "start": 0, "limit": pageSize}});
+
+        processesGrid.store.on(
+            'load',
+            function()
+            {
+                //window.parent.resize_iframe();
+            },
+            this,
+            {
+                single: true
+            }
+        );
+        return processesGrid;
     }
 
     var cm = new Ext.grid.ColumnModel({
@@ -2143,9 +2319,9 @@ Ext.onReady ( function() {
         region: 'center',
         id: 'casesGrid',
         store: storeCases,
+        plugins: expander,
         cm: cm,
         loadMask: mask,
-
         sm: new Ext.grid.RowSelectionModel({
             selectSingle: false,
             listeners:{
@@ -2176,6 +2352,12 @@ Ext.onReady ( function() {
         tbar: tb,
         // paging bar on the bottom
         bbar: pagingToolBar
+    });
+
+    grid.getView().on('refresh', function(view) {
+        if (expandedRow >= 0) {
+            expander.expandRow(expandedRow);
+        }
     });
 
 

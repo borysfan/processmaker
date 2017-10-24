@@ -684,7 +684,7 @@ Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
             labelWidth: 200,
             height: 140,
             style: 'padding: 5px;',
-            items: this.initD isplayFields(),
+            items: this.initDisplayFields(),
             buttons: [
                 {
                     xtype: 'button',

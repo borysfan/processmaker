@@ -30,7 +30,8 @@ if ($actionAjax == 'historyGridList_JXP') {
     G::LoadClass("BasePeer");
 
     global $G_PUBLISH;
-    $criteria = Cases::getTransferHistoryCriteria($_SESSION['APPLICATION']);
+    $applicationUid = isset($_REQUEST['applicationUid'])? $_REQUEST['applicationUid'] : $_SESSION['APPLICATION'];
+    $criteria = Cases::getTransferHistoryCriteria($applicationUid);
 
     $rs = GulliverBasePeer::doSelectRs($criteria);
     $totalCount = $rs->getRecordCount();
@@ -45,9 +46,11 @@ if ($actionAjax == 'historyGridList_JXP') {
     $rs->setFetchmode(ResultSet::FETCHMODE_ASSOC);
     $result = new stdClass();
     $aProcesses = Array();
+    $idx = 1;
     while ($rs->next()) {
         $result = $rs->getRow();
         $result["ID_HISTORY"] = $result["PRO_UID"] . '_' . $result["APP_UID"] . '_' . $result["TAS_UID"];
+        $result["IDX"] = $idx++;
         $aProcesses[] = $result;
     }
 

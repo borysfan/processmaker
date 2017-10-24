@@ -945,19 +945,20 @@ class Configurations // extends Configuration
             default:
                 //todo
                 $caseColumns[] = array("header" => "#", "dataIndex" => "APP_NUMBER", "width" => 45, "align" => "center");
-                $caseColumns[] = array("header" => "Nazwa procesu", "dataIndex" => "APP_PRO_TITLE", "width" => 80, "align" => "center");
-                $caseColumns[] = array("header" => "Obecny krok procesu", "dataIndex" => "APP_TAS_TITLE", "width" => 110, "align" => "center");
-                $caseColumns[] = array("header" => "Autor wniosku", "dataIndex" => "AUTHOR_USR_FULLNAME", "width" => 110, "align" => "center");
+                $caseColumns[] = array("header" => "Nazwa procesu", "dataIndex" => "APP_PRO_TITLE", "width" => 80);
+                $caseColumns[] = array("header" => "Obecny krok procesu", "dataIndex" => "APP_TAS_TITLE", "width" => 110);
+                $caseColumns[] = array("header" => "Autor wniosku", "dataIndex" => "AUTHOR_USR_FULLNAME", "width" => 110);
+                $caseColumns[] = array("header" => "Data utworzenia wniosku", "dataIndex" => "APP_CREATE_DATE", "width" => 110);
+                $caseColumns[] = array("header" => "Ostatni użytkownik wniosku", "dataIndex" => "APP_DEL_PREVIOUS_USER", "width" => 90);
+                $caseColumns[] = array("header" => "Data ostatniego kroku", "dataIndex" => "APP_UPDATE_DATE", "width" => 110);
                 $caseColumns[] = array("header" => "UserUid", "dataIndex" => "USR_UID", "width" => 50, "hidden" => true, "hideable" => false);
-                $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_SUMMARY") : "ID_SUMMARY", "dataIndex" => "CASE_SUMMARY", "width" => 45, "align" => "center", "sortable" => false);
-                $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_CASES_NOTES") : "ID_CASES_NOTES", "dataIndex" => "CASE_NOTES_COUNT", "width" => 45, "align" => "center", "sortable" => false);
-                $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_CASE") : "ID_CASE", "dataIndex" => "APP_TITLE", "width" => 150);
-                $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_PROCESS") : "ID_PROCESS", "dataIndex" => "APP_PRO_TITLE", "width" => 120);
-                $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_TASK") : "ID_TASK", "dataIndex" => "APP_TAS_TITLE", "width" => 120);
-                $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_SENT_BY") : "ID_SENT_BY", "dataIndex" => "APP_DEL_PREVIOUS_USER", "width" => 90);
-                $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_DUE_DATE") : "ID_DUE_DATE", "dataIndex" => "DEL_TASK_DUE_DATE", "width" => 110);
-                $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_LAST_MODIFY") : "ID_LAST_MODIFY", "dataIndex" => "APP_UPDATE_DATE", "width" => 110);
-                $caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_PRIORITY") : "ID_PRIORITY", "dataIndex" => "DEL_PRIORITY", "width" => 50);
+                //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_SUMMARY") : "ID_SUMMARY", "dataIndex" => "CASE_SUMMARY", "width" => 45, "align" => "center", "sortable" => false);
+                //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_CASES_NOTES") : "ID_CASES_NOTES", "dataIndex" => "CASE_NOTES_COUNT", "width" => 45, "align" => "center", "sortable" => false);
+                //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_CASE") : "ID_CASE", "dataIndex" => "APP_TITLE", "width" => 150);
+                //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_PROCESS") : "ID_PROCESS", "dataIndex" => "APP_PRO_TITLE", "width" => 120);
+                //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_TASK") : "ID_TASK", "dataIndex" => "APP_TAS_TITLE", "width" => 120);
+                //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_DUE_DATE") : "ID_DUE_DATE", "dataIndex" => "DEL_TASK_DUE_DATE", "width" => 110);
+                //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_PRIORITY") : "ID_PRIORITY", "dataIndex" => "DEL_PRIORITY", "width" => 50);
 
                 $caseReaderFields[] = array("name" => "APP_UID");
                 $caseReaderFields[] = array("name" => "USR_UID");
