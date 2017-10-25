@@ -657,6 +657,7 @@ Ext.onReady ( function() {
     readerFields.push ( {name: "AUTHOR_LASTNAME"});
     readerFields.push ( {name: "AUTHOR_USERNAME"});
     readerFields.push ( {name: "APP_CREATE_DATE"});
+    readerFields.push ( {name: "APP_INFO_VALUE"});
 
     for (i=0; i<columns.length; i++) {
         if (columns[i].dataIndex == 'USR_UID') {

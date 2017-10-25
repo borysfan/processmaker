@@ -952,6 +952,7 @@ class Configurations // extends Configuration
                 $caseColumns[] = array("header" => "Ostatni użytkownik wniosku", "dataIndex" => "APP_DEL_PREVIOUS_USER", "width" => 90);
                 $caseColumns[] = array("header" => "Data ostatniego kroku", "dataIndex" => "APP_UPDATE_DATE", "width" => 110);
                 $caseColumns[] = array("header" => "UserUid", "dataIndex" => "USR_UID", "width" => 50, "hidden" => true, "hideable" => false);
+                $caseColumns[] = array("header" => "Informacje dodatkowe", "dataIndex" => "APP_INFO_VALUE", "width" => 200);
                 //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_SUMMARY") : "ID_SUMMARY", "dataIndex" => "CASE_SUMMARY", "width" => 45, "align" => "center", "sortable" => false);
                 //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_CASES_NOTES") : "ID_CASES_NOTES", "dataIndex" => "CASE_NOTES_COUNT", "width" => 45, "align" => "center", "sortable" => false);
                 //$caseColumns[] = array("header" => ($translation == 1) ? G::LoadTranslation("ID_CASE") : "ID_CASE", "dataIndex" => "APP_TITLE", "width" => 150);

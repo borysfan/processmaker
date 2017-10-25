@@ -393,6 +393,10 @@ class Applications
         $Criteria->addAsColumn( 'AUTHOR_LASTNAME', 'AUTHOR.USR_LASTNAME' );
         $Criteria->addAsColumn( 'AUTHOR_USERNAME', 'AUTHOR.USR_USERNAME' );
 
+        $Criteria->addAlias('APP_INFO', 'v_case_info');
+        $Criteria->addJoin(AppCacheViewPeer::APP_NUMBER, 'APP_INFO.APP_NUMBER', $Criteria::LEFT_JOIN);
+        $Criteria->addAsColumn('APP_INFO_VALUE', 'APP_INFO.history_data');
+
         //Current delegation
         $appdelcrTableName = AppCacheViewPeer::TABLE_NAME;
         $appdelcrAppTasTitle = "APPDELCR.APP_TAS_TITLE";
