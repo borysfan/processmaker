@@ -457,15 +457,7 @@ Ext.onReady(function() {
                     name: processes[idx].otherAttributes.PRO_TITLE,
                     processDetails: processes[idx],
                     layout: 'fit',
-                    fields: [
-                        {
-                            label: 'Ilość dostpęnych dni urlopowych',
-                            value: '7'
-                        }, {
-                            label: 'Ilość dni UNŻ',
-                            value: '3'
-                        }
-                    ]
+                    fields: processes[idx].attributes
                 });
             columnItems[idx % columnsNo].push(new Ext.Spacer({
                 height: 15
@@ -684,8 +676,9 @@ Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
             xtype: 'form',
             padding: 5,
             buttonAlign: 'center',
+            autoScroll: true,
             labelWidth: 200,
-            height: 140,
+            height: 160,
             style: 'padding: 5px;',
             items: this.initDisplayFields(),
             buttons: [
@@ -695,7 +688,6 @@ Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
                     text: 'Dodaj wniosek',
                     listeners: {
                         click: function() {
-                            console.log(me.buildStartProcessCommand());
                             openCaseA(me.buildStartProcessCommand());
                         }
                     }
@@ -718,15 +710,17 @@ Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
             {
                 xtype: 'displayfield',
                 fieldLabel: 'Nazwa wniosku',
-                value: this.name
+                value: this.name,
+                anchor: '100%'
             }
         ];
 
         for (var i = 0; i < this.fields.length; i++) {
             displayFields.push({
                 xtype: 'displayfield',
-                fieldLabel: this.fields[i].label,
-                value: this.fields[i].value
+                fieldLabel: this.fields[i].Label,
+                value: this.fields[i].Value,
+                anchor: '100%'
             });
         }
         return displayFields;

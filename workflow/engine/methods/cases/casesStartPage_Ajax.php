@@ -46,6 +46,8 @@ function getProcessList ()
 
     $bCanStart = $oCase->canStartCase( $_SESSION['USER_LOGGED'] );
     if ($bCanStart) {
+        $additionalInfos = callRest('GET', 'http://demo0447807.mockable.io/VacationDays/'.$_SESSION['USER_LOGGED']);
+        $processesDetails = G::json_decode($additionalInfos)->{'Processes'};
         $processListInitial = $oCase->getStartCasesPerType( $_SESSION['USER_LOGGED'], 'category' );
         $processList = array ();
         foreach ($processListInitial as $key => $procInfo) {
@@ -93,6 +95,7 @@ function getProcessList ()
                     $tempTreeChild['text'] = htmlentities($keyChild, ENT_QUOTES, 'UTF-8'); //ellipsis ( $keyChild, 50 );
                     //$tempTree['text']=$key;
                     $tempTreeChild['id'] = G::encryptOld($keyChild);
+                    $tempTreeChild['attributes'] = findAdditionalProcessData($processesDetails, $tempTreeChild['id']);
                     $tempTreeChild['draggable'] = true;
                     $tempTreeChild['leaf'] = true;
                     $tempTreeChild['icon'] = '/images/icon.trigger.png';
@@ -144,6 +147,48 @@ function getProcessList ()
     }
     print G::json_encode( $processList );
     die();
+}
+
+function findAdditionalProcessData($processesDetails, $processId) {
+    foreach($processesDetails as $processDetails) {
+        if ($processDetails->{'ProcessId'} == $processId) {
+            return $processDetails->{'Attributes'};
+        }
+    }
+    return [];
+}
+
+function callRest($method, $url, $data = false) {
+    $curl = curl_init();
+
+    switch ($method) {
+        case "POST":
+            curl_setopt($curl, CURLOPT_POST, 1);
+            if ($data) {
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+            }
+            break;
+        case "PUT":
+            curl_setopt($curl, CURLOPT_PUT, 1);
+            break;
+        default:
+            if ($data) {
+                $url = sprintf("%s?%s", $url, http_build_query($data));
+            }
+    }
+
+    // Optional Authentication:
+    //curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    //curl_setopt($curl, CURLOPT_USERPWD, "username:password");
+
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+    $result = curl_exec($curl);
+
+    curl_close($curl);
+
+    return $result;
 }
 
 function ellipsis ($text, $numb)
