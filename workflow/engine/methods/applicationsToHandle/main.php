@@ -25,10 +25,10 @@
 $RBAC->requirePermissions( 'PM_CASES' );
 
 $G_MAIN_MENU = 'processmaker';
-$G_ID_MENU_SELECTED = 'NEW_APPLICATION';
+$G_ID_MENU_SELECTED = 'APPLICATIONS_TO_HANDLE';
 
-$_SESSION['G_CASE_DEFAULT_OPTION'] = 'casesStartPage?action=startCase';
-$_SESSION['G_CASE_CONF_DEFAULT_OPTION'] = 'CASES_START_CASE';
+$_SESSION['G_CASE_DEFAULT_OPTION'] = 'casesListExtJs?action=todo';
+$_SESSION['G_CASE_CONF_DEFAULT_OPTION'] = 'CASES_INBOX';
 
 $_POST['qs'] = isset( $_SERVER['QUERY_STRING'] ) && $_SERVER['QUERY_STRING'] != '' ? '?' . $_SERVER['QUERY_STRING'] : '';
 

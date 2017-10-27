@@ -40,8 +40,18 @@ if (($arrayConfig = $memcache->get( $keyMem )) === false) {
 }
 
 $confDefaultOption = "";
+if ($RBAC->userCanAccess('PM_ADMIN_MENU') < 0){
+    if (isset($_SESSION['G_CASE_DEFAULT_OPTION']) && isset($_SESSION['G_CASE_CONF_DEFAULT_OPTION'])) {
+        $defaultOption = $_SESSION['G_CASE_DEFAULT_OPTION'];
+        $confDefaultOption = $_SESSION['G_CASE_CONF_DEFAULT_OPTION'];
+        unset($_SESSION['G_CASE_DEFAULT_OPTION']);
+        unset($_SESSION['G_CASE_CONF_DEFAULT_OPTION']);
+    } else {
+        $defaultOption = "casesListExtJs?action=todo";
+        $confDefaultOption = "CASES_INBOX";
+    }
 
-if (isset( $arrayConfig["DEFAULT_CASES_MENU"] )) {
+} else if (isset( $arrayConfig["DEFAULT_CASES_MENU"] )) {
     //this user has a configuration record
     $confDefaultOption = $arrayConfig["DEFAULT_CASES_MENU"];
 
@@ -142,6 +152,7 @@ $oHeadPublisher->assign("defaultOption", $defaultOption); //User menu permission
 $oHeadPublisher->assign('urlProxy', $urlProxy); //sending the urlProxy to make
 $oHeadPublisher->assign("_nodeId", isset($confDefaultOption) ? $confDefaultOption : "PM_USERS"); //User menu permissions
 $oHeadPublisher->assign("FORMATS", $conf->getFormats());
+$oHeadPublisher->assign("hideLeftMenu", $RBAC->userCanAccess('PM_ADMIN_MENU'));
 
 $_SESSION["current_ux"] = "NORMAL";
 

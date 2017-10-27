@@ -27,6 +27,11 @@ $RBAC->requirePermissions( 'PM_CASES' );
 $G_MAIN_MENU = 'processmaker';
 $G_ID_MENU_SELECTED = 'CASES';
 
+if ($RBAC->userCanAccess('PM_ADMIN_MENU') < 0){
+    $G_MAIN_MENU = 'processmaker';
+    $G_ID_MENU_SELECTED = 'APPLICATIONS_TO_HANDLE';
+}
+
 $_POST['qs'] = isset( $_SERVER['QUERY_STRING'] ) && $_SERVER['QUERY_STRING'] != '' ? '?' . $_SERVER['QUERY_STRING'] : '';
 
 $G_PUBLISH = new Publisher();

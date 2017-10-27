@@ -31,39 +31,47 @@
 global $G_TMP_MENU;
 global $RBAC;
 
+if ($RBAC->userCanAccess('PM_ADMIN_MENU') == 1) {
 // HOME MODULE
-if ($RBAC->userCanAccess('PM_CASES') == 1) {
-  $G_TMP_MENU->AddIdRawOption('CASES', 'cases/main', G::LoadTranslation('ID_HOME'), '', '', '', 'x-pm-home');
-}
+    if ($RBAC->userCanAccess('PM_CASES') == 1) {
+        $G_TMP_MENU->AddIdRawOption('CASES', 'cases/main', G::LoadTranslation('ID_HOME'), '', '', '', 'x-pm-home');
+    }
 
 // DESIGNER MODULE
-if ($RBAC->userCanAccess('PM_FACTORY') == 1 ) {
-  $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/main', G::LoadTranslation('ID_DESIGNER'), '', '', '', 'x-pm-designer');
-}
+    if ($RBAC->userCanAccess('PM_FACTORY') == 1) {
+        $G_TMP_MENU->AddIdRawOption('PROCESSES', 'processes/main', G::LoadTranslation('ID_DESIGNER'), '', '', '', 'x-pm-designer');
+    }
 
 // DASHBOARD MODULE
-if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
-  $G_TMP_MENU->AddIdRawOption('DASHBOARD', 'dashboard/main', G::LoadTranslation('ID_DASHBOARD'), '', '', '', 'x-pm-dashboard');
-}
+    if ($RBAC->userCanAccess('PM_DASHBOARD') == 1) {
+        $G_TMP_MENU->AddIdRawOption('DASHBOARD', 'dashboard/main', G::LoadTranslation('ID_DASHBOARD'), '', '', '', 'x-pm-dashboard');
+    }
 
-/*----------------------------------********---------------------------------*/
+    /*----------------------------------********---------------------------------*/
 
 // ADMIN MODULE
-if ($RBAC->userCanAccess('PM_SETUP') == 1 || $RBAC->userCanAccess('PM_USERS') == 1) {
-  $G_TMP_MENU->AddIdRawOption('SETUP', 'setup/main', strtolower(G::LoadTranslation('ID_SETUP')), '', '', '', 'x-pm-setup');
+    if ($RBAC->userCanAccess('PM_SETUP') == 1 || $RBAC->userCanAccess('PM_USERS') == 1) {
+        $G_TMP_MENU->AddIdRawOption('SETUP', 'setup/main', strtolower(G::LoadTranslation('ID_SETUP')), '', '', '', 'x-pm-setup');
+    }
+} else {
+
+    /*----------------------------------********---------------------------------*/
+    if ($RBAC->userCanAccess('PM_CASES') == 1) {
+        $G_TMP_MENU->AddIdRawOption('NEW_APPLICATION', 'newApplication/main', G::LoadTranslation('ID_NEW_APPLICATION'), '', '', '', 'x-pm-new-application');
+    }
+
+    if ($RBAC->userCanAccess('PM_CASES') == 1) {
+        $G_TMP_MENU->AddIdRawOption('APPLICATIONS_TO_HANDLE', 'applicationsToHandle/main', G::LoadTranslation('ID_APPLICATIONS_TO_HANDLE'), '', '', '', 'x-pm-application-to-handle');
+    }
+
+    if ($RBAC->userCanAccess('PM_CASES') == 1) {
+        $G_TMP_MENU->AddIdRawOption('MY_APPLICATIONS', 'cases/main', G::LoadTranslation('ID_MY_APPLICATIONS'), '', '', '', 'x-pm-application-to-handle');
+    }
+
+    if ($RBAC->userCanAccess('PM_CASES') == 1) {
+        $G_TMP_MENU->AddIdRawOption('HANDLED_APPLICATIONS', 'cases/main', G::LoadTranslation('ID_HANDLED_APPLICATIONS'), '', '', '', 'x-pm-application-to-handle');
+    }
 }
-
-/*----------------------------------********---------------------------------*/
-if ($RBAC->userCanAccess('PM_CASES') == 1) {
-    $G_TMP_MENU->AddIdRawOption('NEW_APPLICATION', 'newApplication/main', G::LoadTranslation('ID_NEW_APPLICATION'), '', '', '', 'x-pm-new-application');
-}
-
-if ($RBAC->userCanAccess('PM_CASES') == 1) {
-    $G_TMP_MENU->AddIdRawOption('APPLICATIONS_TO_HANDLE', 'cases/main', G::LoadTranslation('ID_APPLICATIONS_TO_HANDLE'), '', '', '', 'x-pm-application-to-handle');
-}
-
-
-
 
 
 // PLUGINS MENUS

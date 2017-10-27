@@ -461,6 +461,11 @@ Ext.onReady(function(){
       }
   }
 
+  //TODO hide menu for not admins
+    if (hideLeftMenu < 0) {
+      mainMenu.hide();
+    }
+  //mainMenu.hide();
   var viewport = new Ext.Viewport({
     layout: 'border',
     items: [ mainMenu, centerPanel, debugPanel]
