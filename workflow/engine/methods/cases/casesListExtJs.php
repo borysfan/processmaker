@@ -140,6 +140,9 @@ $oHeadPublisher->assign('extJsViewState', $oHeadPublisher->getExtJsViewState());
 $oHeadPublisher->assign('isIE', Bootstrap::isIE());
 $oHeadPublisher->assign('__OPEN_APPLICATION_UID__', $openApplicationUid);
 
+$oHeadPublisher->assign('defaultCasesFilter', isset($_SESSION['DEFAULT_CASES_FILTER'])? $_SESSION['DEFAULT_CASES_FILTER'] : '');
+unset($_SESSION['DEFAULT_CASES_FILTER']);
+
 $oPluginRegistry =& PMPluginRegistry::getSingleton();
 $fromPlugin = $oPluginRegistry->getOpenReassignCallback();
 $jsFunction = false;

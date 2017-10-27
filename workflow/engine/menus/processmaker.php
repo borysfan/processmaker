@@ -65,11 +65,11 @@ if ($RBAC->userCanAccess('PM_ADMIN_MENU') == 1) {
     }
 
     if ($RBAC->userCanAccess('PM_CASES') == 1) {
-        $G_TMP_MENU->AddIdRawOption('MY_APPLICATIONS', 'cases/main', G::LoadTranslation('ID_MY_APPLICATIONS'), '', '', '', 'x-pm-application-to-handle');
+        $G_TMP_MENU->AddIdRawOption('MY_APPLICATIONS', 'myApplications/main', G::LoadTranslation('ID_MY_APPLICATIONS'), '', '', '', 'x-pm-application-to-handle');
     }
 
     if ($RBAC->userCanAccess('PM_CASES') == 1) {
-        $G_TMP_MENU->AddIdRawOption('HANDLED_APPLICATIONS', 'cases/main', G::LoadTranslation('ID_HANDLED_APPLICATIONS'), '', '', '', 'x-pm-application-to-handle');
+        $G_TMP_MENU->AddIdRawOption('HANDLED_APPLICATIONS', 'handledApplications/main', G::LoadTranslation('ID_HANDLED_APPLICATIONS'), '', '', '', 'x-pm-application-to-handle');
     }
 }
 

@@ -671,7 +671,7 @@ Ext.onReady ( function() {
     var expander;
     var expandedPanels = {};
     var expandedRow = -1;
-    if (action == 'todo') {
+    if (action == 'todo' || action =='sent') {
         var mask = new Ext.LoadMask(Ext.getBody(), {msg: _('ID_LOADING')});
         expander = new Ext.ux.grid.RowExpander({
             tpl : new Ext.Template(
@@ -1026,6 +1026,9 @@ Ext.onReady ( function() {
                 this.setBaseParam(
                     "openApplicationUid", (__OPEN_APPLICATION_UID__ !== null)? __OPEN_APPLICATION_UID__ : ""
                 );
+                if (defaultCasesFilter) {
+                    this.setBaseParam('filter', defaultCasesFilter);
+                }
             },
             load: function(response){
 
@@ -2166,11 +2169,11 @@ Ext.onReady ( function() {
 
     var toolbarSent = [
         optionMenuOpen,
-        btnStarted,
+        /*btnStarted,
         '-',
         btnCompleted,
         '-',
-        btnAll,
+        btnAll,*/
         '->', // begin using the right-justified button container
         _("ID_CATEGORY"),
         comboCategory,
@@ -2185,11 +2188,11 @@ Ext.onReady ( function() {
         textSearch,
         resetSearchButton,
         btnSearch,
-        '-',
+        /*'-',
         textJump,
         btnJump,
         ' ',
-        ' '
+        ' '*/
     ];
 
     var clearDateFrom = new Ext.Action({
