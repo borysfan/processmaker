@@ -95,7 +95,7 @@ function getProcessList ()
                     $tempTreeChild['text'] = htmlentities($keyChild, ENT_QUOTES, 'UTF-8'); //ellipsis ( $keyChild, 50 );
                     //$tempTree['text']=$key;
                     $tempTreeChild['id'] = G::encryptOld($keyChild);
-                    $tempTreeChild['attributes'] = findAdditionalProcessData($processesDetails, $tempTreeChild['id']);
+                    $tempTreeChild['attributes'] = findAdditionalProcessData($processesDetails, $processInfoChild['pro_uid']);
                     $tempTreeChild['draggable'] = true;
                     $tempTreeChild['leaf'] = true;
                     $tempTreeChild['icon'] = '/images/icon.trigger.png';
