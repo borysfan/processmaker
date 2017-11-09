@@ -444,56 +444,133 @@ Ext.onReady(function() {
     Ext.QuickTips.init();
 
     function showProcessesPanel(processes) {
-        console.dir(processes);
-        var columnsNo = 3;
-        var columnItems ={
-            0: [],
-            1: [],
-            2: []
+        // var columnsNo = 3;
+        // var columnItems ={
+        //     0: [],
+        //     1: [],
+        //     2: []
+        // };
+        // for (var idx = 0; idx < processes.length; idx++) {
+        //     columnItems[idx % columnsNo].push({
+        //             xtype: 'startCasePanel',
+        //             name: processes[idx].otherAttributes.PRO_TITLE,
+        //             processDetails: processes[idx],
+        //             fields: processes[idx].attributes
+        //         });
+        //     columnItems[idx % columnsNo].push(new Ext.Spacer({
+        //         height: 15
+        //     }));
+        // }
+        //
+        // columnItems[0].push({
+        //     xtype: 'panel',
+        //     layout: 'anchor',
+        //     buttonAlign:'center',
+        //     buttons:  [{
+        //         xtype: 'button',
+        //         width: 100,
+        //         text: 'Dodaj wniosek',
+        //         listeners: {
+        //             click: function() {
+        //                 openCaseA(me.buildStartProcessCommand());
+        //             }
+        //         }
+        //     }],
+        //     items: [{
+        //       xtype: 'displayfield',
+        //       value: 'some value'
+        //     }]
+        // });
+
+        var portal = {
+            xtype: 'portal',
+            region: 'center',
+            margins: '35 5 5 5',
+            name: 'portalDashboard',
+            id: 'portalDashboard',
+            noOfColumns:0,
+            tbar: {
+                html: '<span>Dodaj nowy wniosek</span>'
+            },
+            listeners: {
+                resize: function(component, adjWidth, adjHeight, rawWidth, rawHeight) {
+                    console.log("Resize portal" + adjWidth + " " + adjHeight + " " + rawWidth + " " + rawHeight);
+                    resizeIfApplicable(component);
+
+                },
+                afterrender: function(component) {
+                    console.log("Portal width " + component.getWidth());
+                    resizeIfApplicable(component);
+                    component.doLayout();
+                }
+            }
+
         };
-        for (var idx = 0; idx < processes.length; idx++) {
-            columnItems[idx % columnsNo].push({
+
+        function resizeIfApplicable(component) {
+            var width = component.getWidth();
+            var noOfColumns = component.noOfColumns;
+            if (width >= 1200 && noOfColumns !== 3) {
+                adjust(component, 3);
+            } else if (width >= 800 && width < 1200 && noOfColumns !== 2) {
+                adjust(component, 2);
+            } else if (width < 800 && noOfColumns !== 1) {
+                adjust(component, 1);
+            }
+        }
+
+        function adjust(component, noOfColumns) {
+            component.removeAll();
+            console.log("adjusting to " + noOfColumns);
+            component.noOfColumns = noOfColumns;
+            var columnItems = group(noOfColumns);
+            var columns = createColumns(columnItems);
+            component.add(columns, noOfColumns);
+            component.doLayout();
+
+        }
+
+        function createColumns(columnItems) {
+            var columns = [];
+            var noOfColumns = columnItems.length;
+            for (var i=0; i< noOfColumns;i++) {
+                columns.push({
+                    columnWidth: 1/noOfColumns,
+                    style: 'padding:10px 10px 10px 10px; margin: 10px 10px 10px 10px;',
+                    items: columnItems[i]
+                });
+            }
+            return columns;
+        }
+
+        function group(noOfColumns) {
+            var columnItems = [];
+            for (var i=0; i< noOfColumns;i++) {
+                columnItems[i] = [];
+            }
+
+            for (var idx = 0; idx < processes.length; idx++) {
+                columnItems[idx % noOfColumns].push({
                     xtype: 'startCasePanel',
                     name: processes[idx].otherAttributes.PRO_TITLE,
                     processDetails: processes[idx],
-                    layout: 'fit',
                     fields: processes[idx].attributes
                 });
-            columnItems[idx % columnsNo].push(new Ext.Spacer({
-                height: 15
-            }));
+                columnItems[idx % noOfColumns].push(new Ext.Spacer({
+                    height: 15
+                }));
+            }
+            console.log(columnItems);
+            return columnItems;
         }
+
         var viewport = new Ext.Viewport({
             layout: 'fit',
             name: 'viewportDashboard',
             id: 'viewportDashboard',
-            items: [{
-                xtype: 'portal',
-                region: 'center',
-                margins: '35 5 5 5',
-                name: 'portalDashboard',
-                id: 'portalDashboard',
-                tbar: {
-                    html: '<span>Dodaj nowy wniosek</span>'
-                },
-                items: [{
-                    columnWidth: .33,
-                    id: 'columnPos0',
-                    style: 'padding:10px 10px 10px 10px; margin: 10px 10px 10px 10px;',
-                    items: columnItems[0]
-                }, {
-                    columnWidth: .33,
-                    id: 'columnPos1',
-                    style: 'padding:10px 10px 10px 10px; margin: 10px 10px 10px 10px;',
-                    items: columnItems[1]
-                }, {
-                    columnWidth: .33,
-                    id: 'columnPos2',
-                    style: 'padding:10px 10px 10px 10px; margin: 10px 10px 10px 10px;',
-                    items: columnItems[2]
-                }]
-
-            }]
+            items: [
+                portal
+            ]
         });
     }
     //newCaseTree.hide();infoCase.hide();
@@ -660,29 +737,30 @@ Ext.ux.MaskTree = Ext.extend(Ext.tree.TreePanel, {
 }); // end of extend
 Ext.reg('masktree', Ext.ux.MaskTree);
 
-Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
+Ext.ux.StartCasePanel = Ext.extend(Ext.form.FormPanel, {
     name: '',
     fields: [],
     processDetails: undefined,
 
 
+
     initComponent: function(){
         this.collapsible = false;
-        this.cls =  'x-portal';
+        //this.cls =  'x-portal';
         this.frame = true;
         this.draggable = false;
+        this.title = this.name;
         var me = this;
-        this.items = [{
-            xtype: 'form',
-            padding: 5,
-            buttonAlign: 'center',
-            autoScroll: true,
-            labelWidth: 200,
-            height: 160,
-            style: 'padding: 5px;',
-            items: this.initDisplayFields(),
-            buttons: [
-                {
+        this.boxMinWidth = 340;
+        this.border = false;
+        this.bodyBorder = false;
+        this.bodyStyle = "border: none;";
+        this.items = this.initDisplayFields();
+
+        this.labelWidth = 200;
+        this.height = 160;
+        this.buttonAlign = 'center';
+        this.buttons= [{
                     xtype: 'button',
                     width: 100,
                     text: 'Dodaj wniosek',
@@ -693,9 +771,7 @@ Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
                     }
 
 
-                }
-            ]
-        }];
+                }];
         Ext.ux.StartCasePanel.superclass.initComponent.call(this);
     },
 
@@ -705,16 +781,8 @@ Ext.ux.StartCasePanel = Ext.extend(Ext.Panel, {
         }
     },
 
-    initDisplayFields: function(){
-        var displayFields = [
-            {
-                xtype: 'displayfield',
-                fieldLabel: 'Nazwa wniosku',
-                value: this.name,
-                anchor: '100%'
-            }
-        ];
-
+    initDisplayFields: function() {
+        var displayFields = [];
         for (var i = 0; i < this.fields.length; i++) {
             displayFields.push({
                 xtype: 'displayfield',
