@@ -11,9 +11,10 @@ $filter = new InputFilter();
    }
    *html body {
       overflow-y: hidden;
+       background-color: rgb(225, 0, 93);
    }
   </style>
-  <body onresize="autoResizeScreen()" onload="autoResizeScreen()">
+  <body onresize="autoResizeScreen()" onload="autoResizeScreen()" style="background-color: rgb(225, 0, 93);">
   <iframe name="casesFrame" id="casesFrame" src ="<?php echo $cd; ?>../cases/main_init<?php echo $filter->xssFilterHard($_POST['qs']); ?>" width="99%" height="768" frameborder="0">
       <p>Your browser does not support iframes.</p>
   </iframe>

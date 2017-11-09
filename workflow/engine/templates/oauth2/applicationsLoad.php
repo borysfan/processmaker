@@ -1,4 +1,4 @@
-<body onresize="autoResizeScreen()" onload="autoResizeScreen()">
+<body onresize="autoResizeScreen()" onload="autoResizeScreen()" style="background-color: rgb(225, 0, 93);">
 <style type="text/css">
     *html body {
         overflow-y: hidden;

@@ -10,6 +10,9 @@
 	color		:black !important;
 	padding		:0px !important;
 }
+    body {
+        background-color: rgb(225, 0, 93);
+    }
 </style>
 <script>
     oClientWinSize = getClientWindowSize();
@@ -61,7 +64,7 @@
         }
     }
 </script>
-<body onresize="autoResizeScreen()" onload="autoResizeScreen()">
+<body onresize="autoResizeScreen()" onload="autoResizeScreen()" style="background-color: rgb(225, 0, 93);">
 <iframe name="frameMain" id="frameMain" src ="../processes/mainInit" width="99%" height="768" frameborder="0">
   <p>Your browser does not support iframes.</p>
 </iframe>

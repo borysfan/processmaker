@@ -4,10 +4,11 @@
       padding   :0px !important;
    }  
    *html body {
-      overflow-y: hidden;
+       overflow-y: hidden;
+       background-color: rgb(225, 0, 93);
    }
   </style>
-  <body onresize="autoResizeScreen()" onload="autoResizeScreen()">
+  <body onresize="autoResizeScreen()" onload="autoResizeScreen()" style="background-color: rgb(225, 0, 93);">
   <iframe name="casesFrame" id="casesFrame" src ="../dashboard" width="99%" height="768" frameborder="0">
     <p>Your browser does not support iframes.</p>
   </iframe>

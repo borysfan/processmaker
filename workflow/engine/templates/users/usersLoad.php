@@ -10,8 +10,11 @@
   color   : black !important;
   padding : 0px !important;
 }
+body {
+    background-color: rgb(225, 0, 93);
+}
 </style>
-<body onresize="autoResizeScreen()" onload="autoResizeScreen()">
+<body onresize="autoResizeScreen()" onload="autoResizeScreen()" style="background-color: rgb(225, 0, 93);">
 <iframe name="frameMain" id="frameMain" src ="../users/userMain<?php echo ((isset($_GET["create_app"]))? "?create_app" : ""); ?>" width="100%" height="200" frameborder="0">
   <p>Your browser does not support iframes.</p>
 </iframe>
