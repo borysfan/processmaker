@@ -3270,6 +3270,19 @@ ul#pm_menu li {
   float: left;
   padding: 0;
   margin-top: 6.5px;
+  border: 1px solid;
+  border-radius: 10px;
+  min-width: 142px;
+  text-align: center;
+  background-color: rgb(236,107,10);
+  height: 50px;
+  border-color: white;
+  color: black;
+  margin-right: 10px;
+  cursor: pointer;
+}
+ul#pm_menu li:active {
+  border: 2px solid;
 }
 ul#pm_menu a {
   color: #7b7c80;
