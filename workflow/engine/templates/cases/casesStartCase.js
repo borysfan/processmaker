@@ -551,10 +551,11 @@ Ext.onReady(function() {
 
             for (var idx = 0; idx < processes.length; idx++) {
                 columnItems[idx % noOfColumns].push({
-                    xtype: 'startCasePanel',
+                    xtype: 'newStartCasePanel',
                     name: processes[idx].otherAttributes.PRO_TITLE,
                     processDetails: processes[idx],
-                    fields: processes[idx].attributes
+                    fields: processes[idx].attributes,
+                    description: processes[idx].description
                 });
                 columnItems[idx % noOfColumns].push(new Ext.Spacer({
                     height: 15
@@ -737,42 +738,37 @@ Ext.ux.MaskTree = Ext.extend(Ext.tree.TreePanel, {
 }); // end of extend
 Ext.reg('masktree', Ext.ux.MaskTree);
 
-Ext.ux.StartCasePanel = Ext.extend(Ext.form.FormPanel, {
+Ext.ux.NewStartCasePanel = Ext.extend(Ext.Panel, {
     name: '',
+    description: ' ',
     fields: [],
     processDetails: undefined,
-
-
-
-    initComponent: function(){
-        this.collapsible = false;
-        //this.cls =  'x-portal';
-        this.frame = true;
-        this.draggable = false;
-        this.title = this.name;
+    initComponent: function() {
         var me = this;
-        this.boxMinWidth = 340;
-        this.border = false;
-        this.bodyBorder = false;
-        this.bodyStyle = "border: none;";
-        this.items = this.initDisplayFields();
-
-        this.labelWidth = 200;
-        this.height = 160;
+        this.layout =  'anchor';
         this.buttonAlign = 'center';
-        this.buttons= [{
-                    xtype: 'button',
-                    width: 100,
-                    text: 'Dodaj wniosek',
-                    listeners: {
-                        click: function() {
-                            openCaseA(me.buildStartProcessCommand());
-                        }
-                    }
+        this.bodyStyle = 'border-radius: 10px 10px 10px 10px; border: 1px solid; background-color: rgb(159,203,131); font: normal 10pt "Open Sans", Tahoma, sans-serif, MiscFixed; color: white;';
+        Ext.Button.buttonTemplate = new Ext.Template(
+            '<div id="{4}" style="text-align: center;"><button type="{0}" style="width:200px; height: 25px; border-radius: 10px; background-color: rgb(74, 119, 47); cursor: pointer; color: #ffffff; font-size: 14px;"></button></div>');
+        Ext.Button.buttonTemplate.compile();
+        this.items = [{
+            xtype: 'container',
+            style: 'width: auto; height: 140px; background-color: rgb(74, 119, 47); border-radius:10px; margin: 15px 15px 15px 15px; overflow: auto;',
+            items: this.initDisplayFields()
+        }, {
+            xtype: 'button',
+            text: 'Dodaj wniosek',
+            handleMouseEvents: false,
+            height: 35,
+            template:Ext.Button.buttonTemplate,
+            listeners: {
+                click: function() {
+                    openCaseA(me.buildStartProcessCommand());
+                }
+            }
+        }];
 
-
-                }];
-        Ext.ux.StartCasePanel.superclass.initComponent.call(this);
+        Ext.ux.NewStartCasePanel.superclass.initComponent.call(this);
     },
 
     buildStartProcessCommand: function() {
@@ -783,19 +779,27 @@ Ext.ux.StartCasePanel = Ext.extend(Ext.form.FormPanel, {
 
     initDisplayFields: function() {
         var displayFields = [];
+        displayFields.push({
+           xtype: 'box',
+           html: '<div style="text-align: center; padding-top: 5px; font-size: 20px;">'+ this.name +'</div>'
+        });
+        displayFields.push({
+            xtype: 'box',
+            html: '<div><span>'+ this.description +'</span></div>',
+            style: 'padding-left: 10px; text-align:center; font-style: italic;'
+        });
         for (var i = 0; i < this.fields.length; i++) {
             displayFields.push({
-                xtype: 'displayfield',
-                fieldLabel: this.fields[i].Label,
-                value: this.fields[i].Value,
-                anchor: '100%'
+                xtype: 'box',
+                html: '<div><span style="font-weight: bold;">'+this.fields[i].Label+': </span><span>'+this.fields[i].Value+'</span></div>',
+                style: 'padding-left: 10px; padding-top:10px;'
             });
         }
         return displayFields;
     }
 
 });
-Ext.reg('startCasePanel', Ext.ux.StartCasePanel);
+Ext.reg('newStartCasePanel', Ext.ux.NewStartCasePanel);
 
 
 Ext.EventManager.on(window, 'beforeunload', function () {

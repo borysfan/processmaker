@@ -96,6 +96,7 @@ function getProcessList ()
                     //$tempTree['text']=$key;
                     $tempTreeChild['id'] = G::encryptOld($keyChild);
                     $tempTreeChild['attributes'] = findAdditionalProcessData($processesDetails, $processInfoChild['pro_uid']);
+                    $tempTreeChild['description'] = findDescriptionData($processesDetails, $processInfoChild['pro_uid']);
                     $tempTreeChild['draggable'] = true;
                     $tempTreeChild['leaf'] = true;
                     $tempTreeChild['icon'] = '/images/icon.trigger.png';
@@ -156,6 +157,15 @@ function findAdditionalProcessData($processesDetails, $processId) {
         }
     }
     return [];
+}
+
+function findDescriptionData($processesDetails, $processId) {
+    foreach($processesDetails as $processDetails) {
+        if ($processDetails->{'ProcessId'} == $processId) {
+            return $processDetails->{'Description'};
+        }
+    }
+    return ' ';
 }
 
 function callRest($method, $url, $data = false) {
