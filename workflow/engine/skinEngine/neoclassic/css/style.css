@@ -223,11 +223,11 @@ img {
 }
 .logout a {
   font-size: 11px;
-  color: #00a1e4;
+  color: white;
   text-decoration: none;
 }
 .logout a:hover {
-  color: #00597e;
+  color: black;
 }
 .temporalMessageERROR {
   -moz-border-radius: 6px;
@@ -1737,12 +1737,20 @@ div.autosuggest ul em {
 .textBlue {
   color: #00597e;
   font-size: 11px;
+  font-family: sans-serif;
 }
 .textBlack {
   font: normal 8pt "Open Sans", Tahoma, sans-serif, MiscFixed;
   color: #666666;
   text-decoration: none;
 }
+
+.textWhite {
+  font: normal 8pt sans-serif, MiscFixed;
+  color: white;
+  text-decoration: none;
+}
+
 /**************************** End -> Suggest Widget by Erik Amaru Ortiz <erik@colosa.com>  *********************************/
 .tableGrid_view {
   width: 100%;
