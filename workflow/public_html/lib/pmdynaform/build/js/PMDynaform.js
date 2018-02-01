@@ -13459,7 +13459,11 @@ xCase.extendNamespace = function (path, newClass) {
                 }
                 $(window).off('resize', windowResizeHandler);
             };
-
+            moment.lang('en', {
+                week : {
+                    dow : 1 // Monday is the first day of the week
+                }
+            });
             control.datetimepicker({
                 format: this.model.get("format"),
                 stepping: this.model.get("stepping"),

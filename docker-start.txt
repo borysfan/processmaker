@@ -1,0 +1,1 @@
+> docker run -i -p 80:80 -v  "$PWD":/opt/processmaker  -t debian-processmaker /bin/bash
