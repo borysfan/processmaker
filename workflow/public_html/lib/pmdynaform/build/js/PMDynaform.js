@@ -9490,7 +9490,7 @@ xCase.extendNamespace = function (path, newClass) {
          */
         onChangeData: function () {
             var data = this.model.get("data"),
-                hiddenInput = this.tagHiddenToLabel;
+                hiddenInput = this.$el.find("input[type='hidden']");//fix
             if (data.hasOwnProperty("label")) {
                 hiddenInput.val(data.label);
             }
