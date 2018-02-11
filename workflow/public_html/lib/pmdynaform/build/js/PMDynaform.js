@@ -13488,7 +13488,7 @@ xCase.extendNamespace = function (path, newClass) {
                 }
                 that.recalculateWidgetPosition();
                 $(window).on('resize', windowResizeHandler);
-
+                that.markHolidays();
             }).on('dp.hide', function () {
                 that.$el.find('input.form-control').eq(0).blur();
             }).on('dp.change', function (event) {
@@ -13497,6 +13497,8 @@ xCase.extendNamespace = function (path, newClass) {
                     that.firstLoad = false;
                     that.eventListener(event, event.date);
                 }
+            }).on('dp.update', function(event) {
+                that.markHolidays();
             }).find('.form-control').attr('readonly', this.project.isMobile());
             
             this.datepickerObject = this.$el.find('#datetime-container-control').data()["DateTimePicker"];
@@ -13522,6 +13524,29 @@ xCase.extendNamespace = function (path, newClass) {
             this.$el.find(".content-print").text(this.model.get("data")["label"]);
             PMDynaform.view.Field.prototype.render.apply(this, arguments);
             return this;
+        },
+        markHolidays: function() {
+            var that = this;
+            var calendarDays = document.querySelectorAll('td[data-action="selectDay"]');
+            if (calendarDays !== null) {
+                calendarDays.forEach(function (calendarDay) {
+                    var dataDay = calendarDay.getAttribute('data-day');
+                    if (that.isHoliday(dataDay)) {
+                        calendarDay.style.background = 'red';
+                    }
+                });
+            }
+        },
+        isHoliday: function (dateStr) {
+            if (typeof holidayDates !== 'undefined' && holidayDates !== null) {
+                var idx;
+                for (idx in holidayDates) {
+                    if (holidayDates[idx] === dateStr) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         },
         /**
          * navigation event handler Time control
