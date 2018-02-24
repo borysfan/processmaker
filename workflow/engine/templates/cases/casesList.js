@@ -817,7 +817,7 @@ Ext.onReady ( function() {
                             myMask.hide();
                         };
                     } else {
-                        Ext.MessageBox.alert('Status', 'Krok procesu w trakcie obsługi. Historia niedostępna.');
+                        Ext.MessageBox.alert('Historia niedostępna', 'Krok procesu w trakcie obsługi.');
                     }
                     e.stopPropagation();
                 }
