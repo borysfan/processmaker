@@ -28,6 +28,7 @@ class pmDynaform
     private $dataSources = null;
     private $databaseProviders = null;
     private $propertiesToExclude = array();
+    private $auditMode = false;
     public static $prefixs = array("@@", "@#", "@%", "@?", "@$", "@=");
 
     public function __construct($fields = array())
@@ -44,6 +45,10 @@ class pmDynaform
         $this->getDynaforms();
         $this->synchronizeSubDynaform();
         $this->getCredentials();
+        if (isset($fields['DYN_CONTENT'])) {
+            $this->record['DYN_CONTENT'] = $fields['DYN_CONTENT'];
+            $this->auditMode = true;
+        }
         if (is_array($this->fields) && !isset($this->fields["APP_UID"])) {
             $this->fields["APP_UID"] = null;
         }
@@ -52,6 +57,11 @@ class pmDynaform
             if ($decode !== false) {
                 $this->record["DYN_CONTENT"] = $decode;
             }
+        }
+
+        if (isset($fields["AUDIT_DYN_CONTENT"]) && isset($fields["AUDIT_APP_DATA"])) {
+            $this->record["DYN_CONTENT"] = $fields["AUDIT_DYN_CONTENT"];
+            $this->fields["APP_DATA"] = $fields["AUDIT_APP_DATA"];
         }
 
         //todo: compatibility checkbox
@@ -726,7 +736,7 @@ class pmDynaform
                 if ($this->displayMode !== null && isset($json->mode)) {
                     $json->mode = $this->displayMode;
                 }
-                if ($key === "type" && ($value === "form") && $this->records != null) {
+                if ($key === "type" && ($value === "form") && $this->records != null && !$this->auditMode) {
                     foreach ($this->records as $ri) {
                         if ($json->id === $ri["DYN_UID"] && !isset($json->jsonUpdate)) {
                             $jsonUpdate = G::json_decode($ri["DYN_CONTENT"]);
@@ -1049,7 +1059,6 @@ class pmDynaform
                 }
             }
         }
-
         $this->jsonr($json);
 
         $javascript = "

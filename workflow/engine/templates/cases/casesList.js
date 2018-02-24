@@ -754,11 +754,10 @@ Ext.onReady ( function() {
         var selectionModel = new Ext.grid.RowSelectionModel({
             listeners:{
                 beforerowselect: function( event, rowIndex, keepExisting, record ){
-                    console.log(event);
+                    //console.log(event);
                 }
             }
         });
-        selectionModel.lock();
 
         var processesGrid = new Ext.grid.GridPanel({
             region: 'center',
@@ -789,6 +788,34 @@ Ext.onReady ( function() {
                     e.stopPropagation();
                 },
                 rowdblclick: function( component, rowIndex, e ) {
+                    var rowSelected = processesGrid.getSelectionModel().getSelected();
+                    //console.log(rowSelected.json);
+
+                    var win = new Ext.Window({
+                        layout:'fit',
+                        width:800,
+                        height:600,
+                        closeAction:'destroy',
+                        plain: true,
+                        flex: 1,
+                        title: rowSelected.json.TAS_TITLE,
+                        modal: true,
+                        html: '<iframe id="auditDataIFrame" width="100%" height="100%" frameborder="0" src="cases_Open?APP_UID=' + rowSelected.json.APP_UID + '&DEL_INDEX=1&action=todo&AUD_TAS_UID=' + rowSelected.json.TAS_UID + '&AUD_APP_UID=' + rowSelected.json.APP_UID + '"></iframe>',
+
+                        buttons: [{
+                            text: 'Zamknij',
+                            handler: function(){
+                                win.hide();
+                                win.destroy();
+                            }
+                        }]
+                    });
+                    win.show();
+                    var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
+                    myMask.show();
+                    document.getElementById("auditDataIFrame").onload = function() {
+                        myMask.hide();
+                    };
                     e.stopPropagation();
                 }
             },

@@ -921,6 +921,10 @@ class Cases
                         $currentDynaform["DYN_CONTENT"] = "";
                     }
                     //There are changes
+//
+                    if (isset($Fields['SAVE_AUDIT']) && $Fields['SAVE_AUDIT'] == true) {
+                        $this->saveAudit($Fields, $currentDynaform["DYN_CONTENT"]);
+                    }
                     $Fields['APP_STATUS'] = (isset($Fields['APP_STATUS'])) ? $Fields['APP_STATUS'] : $FieldsBefore['APP_STATUS'];
                     $appHistory = new AppHistory();
                     $aFieldsHistory = $Fields;
@@ -1013,6 +1017,17 @@ class Cases
         } catch (exception $e) {
             throw ($e);
         }
+    }
+
+    public function saveAudit($fields = array(), $dynaForm) {
+        $audit = new AppAudit();
+        $auditData = array();
+        $auditData['TAS_UID'] = $fields['TAS_UID'];
+        $auditData['APP_UID'] = $fields['APP_UID'];
+        $auditData['DYN_CONTENT'] = $dynaForm;
+        $auditData['APP_DATA'] = $fields['APP_DATA'];
+
+        $audit->insertAudit($auditData);
     }
 
     /*

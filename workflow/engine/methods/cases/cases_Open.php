@@ -51,6 +51,21 @@ $oCase = new Cases();
 Cases::clearCaseSessionData();
 
 try {
+
+    if (isset($_GET['AUD_TAS_UID']) && isset($_GET['AUD_APP_UID'])) {
+        $aFields = $oCase->loadCase( $_GET['APP_UID'], $_GET['DEL_INDEX']);
+        $_SESSION['APPLICATION'] =  $_GET['APP_UID'];
+        $_SESSION['INDEX'] = $oCase->getCurrentDelegationCase($_GET['APP_UID']);
+        $_SESSION['PROCESS'] = $aFields['PRO_UID'];
+        $_SESSION['TASK'] = -1;
+        $_SESSION['STEP_POSITION'] = 0;
+        $Fields = $oCase->loadCase($_SESSION['APPLICATION'], $_SESSION['INDEX']);
+        $_SESSION['CURRENT_TASK'] = $Fields['TAS_UID'];
+        $sPage = 'cases_Step?TYPE=DYNAFORM&UID=13180541959661dd11d4a25033941242&POSITION=1&ACTION=EDIT&AUD_TAS_UID='.$_GET['AUD_TAS_UID'].'&AUD_APP_UID='.$_GET['AUD_APP_UID'];
+
+        G::header( 'location: ' . $sPage );
+        exit();
+    }
     //Loading data for a Jump request
     if (!isset($_GET['APP_UID']) && isset($_GET['APP_NUMBER'])) {
         $_GET['APP_UID'] = $oCase->getApplicationUIDByNumber( $_GET['APP_NUMBER'] );
@@ -180,8 +195,8 @@ try {
 
                 $aNextStep = $oCase->getNextStep( $_SESSION['PROCESS'], $_SESSION['APPLICATION'], $_SESSION['INDEX'], $_SESSION['STEP_POSITION'] );
                 $sPage = $aNextStep['PAGE'];
-                G::header( 'location: ' . $sPage );
 
+                G::header( 'location: ' . $sPage );
             } else {
                 $_SESSION['APPLICATION'] = $sAppUid;
                 $_SESSION['PROCESS'] = $aFields['PRO_UID'];

@@ -4,7 +4,7 @@ $filter = new InputFilter();
 list($_GET['UID'], $_GET['TYPE'], $_GET['POSITION'], $_GET['ACTION']) = $filter->xssRegexFilter(
     [$_GET['UID'], $_GET['TYPE'], $_GET['POSITION'], $_GET['ACTION']], '/[\-\w]/'
 );
-
+if (!isset($_GET['AUD_TAS_UID']) && !isset($_GET['AUD_APP_UID'])) {
 if (!isset($_SESSION['USER_LOGGED'])) {
     if(!strpos($_SERVER['REQUEST_URI'], 'gmail')) {
         $responseObject = new stdclass();
@@ -54,22 +54,25 @@ if (!isset($_SESSION['USER_LOGGED'])) {
 }
 
 require_once 'classes/model/AppDelegation.php';
-$delegation = new AppDelegation();
-if ($delegation->alreadyRouted($_SESSION['APPLICATION'], $_SESSION['INDEX'])) {
-    if (array_key_exists('gmail', $_SESSION) && $_SESSION['gmail'] == 1) {
-        $mUrl = '../cases/cases_Open?APP_UID=' . $_SESSION['APPLICATION'] . '&DEL_INDEX=' . $_SESSION['INDEX'] . '&action=sent';
-        header('location:' . $mUrl);
-        die();
-    }
-    if (SYS_SKIN === "uxs") {
-        G::header('location: ../home/appList');
-        die();
-    } else {
-        die('<script type="text/javascript">'
+
+    $delegation = new AppDelegation();
+    if ($delegation->alreadyRouted($_SESSION['APPLICATION'], $_SESSION['INDEX'])) {
+        if (array_key_exists('gmail', $_SESSION) && $_SESSION['gmail'] == 1) {
+            $mUrl = '../cases/cases_Open?APP_UID=' . $_SESSION['APPLICATION'] . '&DEL_INDEX=' . $_SESSION['INDEX'] . '&action=sent';
+            header('location:' . $mUrl);
+            die();
+        }
+        if (SYS_SKIN === "uxs") {
+            G::header('location: ../home/appList');
+            die();
+        } else {
+            die('<script type="text/javascript">'
                 . 'window.parent.location="casesListExtJs?action=todo";'
                 . '</script>');
+        }
     }
 }
+
 /**
  * cases_Step.php
  *
@@ -164,6 +167,7 @@ $oStep = new Step();
 
 $Fields = $oCase->loadCase( $_SESSION['APPLICATION'] );
 $Fields['APP_DATA'] = array_merge( $Fields['APP_DATA'], G::getSystemConstants() );
+
 $sStatus = $Fields['APP_STATUS'];
 
 $APP_NUMBER = $Fields['APP_NUMBER'];
@@ -309,6 +313,21 @@ try {
             if ($noShowTitle == 0) {
                 $G_PUBLISH->AddContent( 'smarty', 'cases/cases_title', '', '', $array );
             }
+            if (isset($_GET["AUD_TAS_UID"]) && isset($_GET["AUD_APP_UID"])) {
+                G::LoadClass('AppAudit');
+                $audit = AppAuditPeer::retrieveByPK($_GET["AUD_TAS_UID"], $_GET["AUD_APP_UID"]);
+                $newFields = array();
+                $unserializedData = @unserialize($audit->getAppData());
+
+                // BUG 8134, FIX!// for single/double quote troubles // Unserialize with utf8 content get trouble
+                if ($unserializedData === false) {
+                    $unserializedData = preg_replace('!s:(\d+):"(.*?)";!e', "'s:'.strlen('$2').':\"$2\";'", $data);
+                    $unserializedData = @unserialize($unserializedData);
+                }
+                $Fields['APP_DATA'] = $unserializedData;
+                $Fields['DYN_CONTENT'] = $audit->getDynContent();
+            }
+
             if (! $aPreviousStep) {
                 $Fields['APP_DATA']['__DYNAFORM_OPTIONS']['PREVIOUS_STEP_LABEL'] = '';
             } else {
@@ -345,12 +364,17 @@ try {
             G::LoadClass('pmDynaform');
             $FieldsPmDynaform = $Fields;
             $FieldsPmDynaform["PM_RUN_OUTSIDE_MAIN_APP"] = (!isset($_SESSION["PM_RUN_OUTSIDE_MAIN_APP"])) ? "true" : "false";
-            $FieldsPmDynaform["STEP_MODE"] = $oStep->getStepMode();
+            $FieldsPmDynaform["STEP_MODE"] = $oStep != null ?$oStep->getStepMode() : 'VIEW';
             $FieldsPmDynaform["PRO_SHOW_MESSAGE"] = $noShowTitle;
             $FieldsPmDynaform["TRIGGER_DEBUG"] = $_SESSION['TRIGGER_DEBUG']['ISSET'];
+
             $a = new pmDynaform(\ProcessMaker\Util\DateTime::convertUtcToTimeZone($FieldsPmDynaform));
             if ($a->isResponsive()) {
-                $a->printEdit();
+                if (isset($_GET["AUD_TAS_UID"]) && isset($_GET["AUD_APP_UID"])) {
+                    $a->printView();
+                } else {
+                    $a->printEdit();
+                }
             } else {
             	if(array_key_exists('gmail',$_GET) && $_GET['gmail'] == 1){
             		$G_PUBLISH->AddContent('dynaform', 'xmlform', $_SESSION['PROCESS'] . '/' . $_GET['UID'], '', \ProcessMaker\Util\DateTime::convertUtcToTimeZone($Fields['APP_DATA']), 'cases_SaveData?UID=' . $_GET['UID'] . '&APP_UID=' . $_SESSION['APPLICATION'] . '&gmail=1', '', (strtolower($oStep->getStepMode()) != 'edit' ? strtolower($oStep->getStepMode()) : ''));

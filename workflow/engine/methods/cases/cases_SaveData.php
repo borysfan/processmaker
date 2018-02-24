@@ -283,7 +283,7 @@ try {
         $aData['APP_DATA'] = array_merge($pmdynaform,$aData['APP_DATA']);
         $_POST["DynaformRequiredFields"] = '[]';
     }
-
+    $aData['SAVE_AUDIT'] = true;
     $oCase->updateCase( $_SESSION['APPLICATION'], $aData );
 
     // saving the data ina pm table in case that is a new record
