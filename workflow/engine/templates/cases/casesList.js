@@ -790,32 +790,35 @@ Ext.onReady ( function() {
                 rowdblclick: function( component, rowIndex, e ) {
                     var rowSelected = processesGrid.getSelectionModel().getSelected();
                     //console.log(rowSelected.json);
+                    if (rowSelected.json.APP_TYPE == null) {
+                        var win = new Ext.Window({
+                            layout: 'fit',
+                            width: 800,
+                            height: 600,
+                            closeAction: 'destroy',
+                            plain: true,
+                            flex: 1,
+                            title: rowSelected.json.TAS_TITLE,
+                            modal: true,
+                            html: '<iframe id="auditDataIFrame" width="100%" height="100%" frameborder="0" src="cases_Open?APP_UID=' + rowSelected.json.APP_UID + '&DEL_INDEX=1&action=todo&AUD_TAS_UID=' + rowSelected.json.TAS_UID + '&AUD_APP_UID=' + rowSelected.json.APP_UID + '"></iframe>',
 
-                    var win = new Ext.Window({
-                        layout:'fit',
-                        width:800,
-                        height:600,
-                        closeAction:'destroy',
-                        plain: true,
-                        flex: 1,
-                        title: rowSelected.json.TAS_TITLE,
-                        modal: true,
-                        html: '<iframe id="auditDataIFrame" width="100%" height="100%" frameborder="0" src="cases_Open?APP_UID=' + rowSelected.json.APP_UID + '&DEL_INDEX=1&action=todo&AUD_TAS_UID=' + rowSelected.json.TAS_UID + '&AUD_APP_UID=' + rowSelected.json.APP_UID + '"></iframe>',
-
-                        buttons: [{
-                            text: 'Zamknij',
-                            handler: function(){
-                                win.hide();
-                                win.destroy();
-                            }
-                        }]
-                    });
-                    win.show();
-                    var myMask = new Ext.LoadMask(Ext.getBody(), {msg:"Please wait..."});
-                    myMask.show();
-                    document.getElementById("auditDataIFrame").onload = function() {
-                        myMask.hide();
-                    };
+                            buttons: [{
+                                text: 'Zamknij',
+                                handler: function () {
+                                    win.hide();
+                                    win.destroy();
+                                }
+                            }]
+                        });
+                        win.show();
+                        var myMask = new Ext.LoadMask(Ext.getBody(), {msg: "Please wait..."});
+                        myMask.show();
+                        document.getElementById("auditDataIFrame").onload = function () {
+                            myMask.hide();
+                        };
+                    } else {
+                        Ext.MessageBox.alert('Status', 'Krok procesu w trakcie obsługi. Historia niedostępna.');
+                    }
                     e.stopPropagation();
                 }
             },

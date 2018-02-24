@@ -316,6 +316,11 @@ try {
             if (isset($_GET["AUD_TAS_UID"]) && isset($_GET["AUD_APP_UID"])) {
                 G::LoadClass('AppAudit');
                 $audit = AppAuditPeer::retrieveByPK($_GET["AUD_TAS_UID"], $_GET["AUD_APP_UID"]);
+                if ($audit == null) {
+
+                    echo "<div><p style='font-size:12px;'>Brak danych dotyczących kroku w bazie.</p></div>";
+                    exit();
+                }
                 $newFields = array();
                 $unserializedData = @unserialize($audit->getAppData());
 
