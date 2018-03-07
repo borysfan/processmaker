@@ -227,7 +227,8 @@ abstract class BaseAppAudit extends BaseObject implements Persistent {
     {
         $criteria = new Criteria(AppAuditPeer::DATABASE_NAME);
 
-
+        $criteria->add(AppAuditPeer::APP_UID, $this->app_uid);
+        $criteria->add(AppAuditPeer::TAS_UID, $this->tas_uid);
         return $criteria;
     }
 

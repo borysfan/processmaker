@@ -1020,14 +1020,21 @@ class Cases
     }
 
     public function saveAudit($fields = array(), $dynaForm) {
-        $audit = new AppAudit();
-        $auditData = array();
-        $auditData['TAS_UID'] = $fields['TAS_UID'];
-        $auditData['APP_UID'] = $fields['APP_UID'];
-        $auditData['DYN_CONTENT'] = $dynaForm;
-        $auditData['APP_DATA'] = $fields['APP_DATA'];
+        $audit = AppAuditPeer::retrieveByPK($fields['TAS_UID'], $fields['APP_UID']);
+        if ($audit == null) {
+            $audit = new AppAudit();
+            $auditData = array();
+            $auditData['TAS_UID'] = $fields['TAS_UID'];
+            $auditData['APP_UID'] = $fields['APP_UID'];
+            $auditData['DYN_CONTENT'] = $dynaForm;
+            $auditData['APP_DATA'] = $fields['APP_DATA'];
 
-        $audit->insertAudit($auditData);
+            $audit->insertAudit($auditData);
+        } else {
+            $audit->setAppData($fields['APP_DATA']);
+            $audit->setDynContent($dynaForm);
+            $audit->save();
+        }
     }
 
     /*

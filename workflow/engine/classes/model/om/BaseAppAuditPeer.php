@@ -73,6 +73,31 @@ abstract class BaseAppAuditPeer
         return $pk;
     }
 
+    public static function doUpdate($values, $con = null)
+    {
+        if ($con === null) {
+            $con = Propel::getConnection(self::DATABASE_NAME);
+        }
+
+        $selectCriteria = new Criteria(self::DATABASE_NAME);
+
+        if ($values instanceof Criteria) {
+            $criteria = clone $values; // rename for clarity
+
+            $comparison = $criteria->getComparison(AppAuditPeer::APP_UID);
+            $selectCriteria->add(AppAuditPeer::APP_UID, $criteria->remove(AppAuditPeer::APP_UID), $comparison);
+
+        } else {
+            $criteria = $values->buildCriteria(); // gets full criteria
+            $selectCriteria = $values->buildPkeyCriteria(); // gets criteria w/ primary key(s)
+        }
+
+        // set the correct dbName
+        $criteria->setDbName(self::DATABASE_NAME);
+
+        return BasePeer::doUpdate($selectCriteria, $criteria, $con);
+    }
+
     /**
      * Retrieve a single object by pkey.
      *
