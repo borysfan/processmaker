@@ -20,3 +20,12 @@ Additional updates:
 UPDATE TRANSLATION SET TRN_VALUE='Wnioski zakończone' WHERE TRN_ID = 'ID_HANDLED_APPLICATIONS';
 UPDATE TRANSLATION SET TRN_VALUE='Wnioski do zaakceptowania' WHERE TRN_ID = 'ID_APPLICATIONS_TO_HANDLE';
 ```
+
+#New button for my group tasks
+1. New literal to database
+```
+INSERT INTO TRANSLATION (TRN_CATEGORY,TRN_ID,TRN_LANG,TRN_VALUE,TRN_UPDATE_DATE )  VALUES
+( 'LABEL','ID_MY_GROUP_APPLICATIONS','en','Wnioski grupy','2017-10-09');
+
+``` 
+Remember to remove META-INF directory with cached translations
